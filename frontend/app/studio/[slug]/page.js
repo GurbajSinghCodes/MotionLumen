@@ -1,6 +1,5 @@
-import { API } from '../../../lib/api';
+import { publicAPI } from '../../../lib/api';
 import StudioPageUI from '../../../components/StudioPage';
-
 // ── data fetching logic unchanged ──────────────────────────────────────────
 async function getStudio(slug) {
     try {
