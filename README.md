@@ -1,4 +1,4 @@
-# PrewedPro SaaS
+# MotionLumen SaaS
 
 A complete starter SaaS for pre-wedding photography businesses.
 

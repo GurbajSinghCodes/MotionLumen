@@ -6,7 +6,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 export default function Login() {
-    const [form, setForm] = useState({ email: 'Gursewakbajaj@gmail.com', password: '123456' });
+    const [form, setForm] = useState({ email: '', password: '' });
     const [msg, setMsg] = useState('');
     const [loading, setLoading] = useState(false);
 
@@ -108,7 +108,6 @@ export default function Login() {
 
             <form onSubmit={submit} className="card p-8 max-w-md w-full">
                 <h1 className="text-3xl font-black">Business Login</h1>
-                <p className="text-zinc-300 mt-2">Demo: demo@studio.com / 123456</p>
 
                 <input
                     className="input mt-6"

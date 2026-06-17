@@ -6,16 +6,16 @@ const Client = require('./models/Client');
 (async () => {
     await mongoose.connect(process.env.MONGO_URI);
     // await Business.deleteMany({});
-    await Business.create({
-        name: 'Super admin',
-        slug: 'Admin Studio',
-        ownerName: 'Demo Owner',
-        email: 'admin@gmail.com',
-        password: await bcrypt.hash('123456', 10),
-        role: 'superadmin',
-        status: 'active',
-        plan: 'trial',
-    });
+    // await Business.create({
+    //     name: 'Super admin',
+    //     slug: 'Admin Studio',
+    //     ownerName: 'Demo Owner',
+    //     email: 'admin@gmail.com',
+    //     password: await bcrypt.hash('123456', 10),
+    //     role: 'superadmin',
+    //     status: 'active',
+    //     plan: 'trial',
+    // });
 
     // const b = await Business.create({
     //     name: 'Demo Wedding Studio',
@@ -51,5 +51,6 @@ const Client = require('./models/Client');
     //         otherExpense: 1000
     //     });
 
-    // console.log('Demo login: demo@studio.com / 123456'); process.exit();
+    // console.log('Demo login: demo@studio.com / 123456');
+    process.exit();
 })();
