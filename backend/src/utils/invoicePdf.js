@@ -1,4 +1,5 @@
-const puppeteer = require('puppeteer');
+const puppeteer = require('puppeteer-core');
+const chromium = require('@sparticuz/chromium');
 
 module.exports = async function buildInvoicePdf(client, businessProfile) {
     try {
@@ -28,7 +29,6 @@ module.exports = async function buildInvoicePdf(client, businessProfile) {
                 contactEmail: businessProfile.contactEmail || '',
                 gstNumber: businessProfile.gstNumber || '',
                 fullAddress: businessProfile.fullAddress || '',
-                // ─── Fix Logo URL ──────────────────────────────
                 logoUrl: businessProfile.logoUrl
                     ? businessProfile.logoUrl.startsWith('http')
                         ? businessProfile.logoUrl
@@ -54,6 +54,7 @@ module.exports = async function buildInvoicePdf(client, businessProfile) {
 <head>
     <meta charset="UTF-8">
     <title>Invoice ${client.invoiceId}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -447,28 +448,17 @@ module.exports = async function buildInvoicePdf(client, businessProfile) {
             ${data.business.instagram || data.business.whatsapp ? `
             <div class="social-links">
                 ${data.business.instagram ? `
-                    <a href="https://instagram.com/${data.business.instagram.replace('@', '')}" target="_blank" class="social-link">
-                        <span class="icon">
-                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M7.75 2.5h8.5A5.25 5.25 0 0 1 21.5 7.75v8.5A5.25 5.25 0 0 1 16.25 21.5h-8.5A5.25 5.25 0 0 1 2.5 16.25v-8.5A5.25 5.25 0 0 1 7.75 2.5Z" stroke="#E1306C" stroke-width="1.5"/>
-                                <path d="M15.5 11.999a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z" stroke="#E1306C" stroke-width="1.5"/>
-                                <path d="M17.5 6.5h.01" stroke="#E1306C" stroke-width="1.5" stroke-linecap="round"/>
-                            </svg>
-                        </span>
-                        ${data.business.instagram}
-                    </a>
-                ` : ''}
-                ${data.business.whatsapp ? `
-                    <a href="https://wa.me/${data.business.whatsapp.replace(/[^0-9]/g, '')}" target="_blank" class="social-link">
-                        <span class="icon">
-                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M12.01 2.5C6.048 2.5 1.5 6.945 1.5 12c0 1.975.596 3.807 1.62 5.354L2 22.5l5.262-1.377A9.471 9.471 0 0 0 12.01 21.5c5.962 0 10.51-4.445 10.51-9.5S17.972 2.5 12.01 2.5Z" stroke="#25D366" stroke-width="1.5"/>
-                                <path d="M15.41 14.82c-.22.6-1.26 1.17-1.72 1.24-.45.07-1.01.1-1.86-.2a7.546 7.546 0 0 1-3.39-2.2 6.924 6.924 0 0 1-1.33-2.1c-.14-.38-.26-.85.09-1.24l.37-.38c.2-.2.47-.26.72-.17.23.07.72.3 1.14.6.4.28.83.66.96.84.12.18.2.42.08.69-.1.25-.4.79-.54 1.05-.15.27-.3.32-.56.2-.24-.1-.98-.37-1.86-1.13-.7-.62-1.17-1.4-1.3-1.71-.13-.32-.01-.6.11-.77.12-.17.26-.43.39-.65.14-.22.18-.38.28-.63.1-.25.05-.47-.02-.66-.08-.19-.72-1.73-.99-2.37-.26-.64-.53-.55-.72-.56-.18-.01-.4-.01-.61-.01-.2 0-.53.07-.81.35-.28.28-1.08 1.06-1.08 2.58 0 1.52 1.11 2.99 1.27 3.2.16.22 2.2 3.36 5.33 4.7.74.32 1.32.51 1.77.65.74.24 1.41.21 1.94.13.59-.09 1.82-.74 2.08-1.45.27-.71.27-1.32.19-1.45-.08-.13-.3-.2-.63-.34Z" fill="#25D366"/>
-                            </svg>
-                        </span>
-                        WhatsApp
-                    </a>
-                ` : ''}
+    <a href="https://instagram.com/${data.business.instagram.replace('@', '')}" target="_blank" class="social-link">
+        <i class="fab fa-instagram" style="font-size:20px;color:#E1306C;"></i>
+        ${data.business.instagram}
+    </a>
+` : ''}
+${data.business.whatsapp ? `
+    <a href="https://wa.me/${data.business.whatsapp.replace(/[^0-9]/g, '')}" target="_blank" class="social-link">
+        <i class="fab fa-whatsapp" style="font-size:20px;color:#25D366;"></i>
+        WhatsApp
+    </a>
+` : ''}
             </div>
             ` : ''}
             
@@ -481,10 +471,26 @@ module.exports = async function buildInvoicePdf(client, businessProfile) {
 </html>`;
 
         // ─── Generate PDF ──────────────────────────────────────
-        const browser = await puppeteer.launch({
-            headless: 'new',
-            args: ['--no-sandbox', '--disable-setuid-sandbox']
-        });
+        // Detect if running on Render (production) or local
+        const isProduction = process.env.NODE_ENV === 'production' || process.env.RENDER === 'true';
+
+        let browser;
+        if (isProduction) {
+            // Production: Use @sparticuz/chromium (for Render)
+            browser = await puppeteer.launch({
+                args: [...chromium.args, '--no-sandbox', '--disable-setuid-sandbox'],
+                defaultViewport: chromium.defaultViewport,
+                executablePath: await chromium.executablePath(),
+                headless: 'new',
+            });
+        } else {
+            // Local development: Use system Chrome
+            browser = await puppeteer.launch({
+                headless: 'new',
+                args: ['--no-sandbox', '--disable-setuid-sandbox'],
+                executablePath: process.env.CHROME_PATH || 'C:/Program Files/Google/Chrome/Application/chrome.exe'
+            });
+        }
 
         const page = await browser.newPage();
 
