@@ -1,6 +1,6 @@
 # MotionLumen SaaS
 
-A complete starter SaaS for pre-wedding photography businesses.
+A complete starter SaaS photography businesses.
 
 ## Features
 

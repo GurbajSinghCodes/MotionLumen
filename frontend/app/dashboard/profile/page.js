@@ -443,7 +443,7 @@ export default function BusinessProfile() {
                                 value={profile.headline || ''}
                                 onChange={handleChange}
                                 disabled={!isEditing}
-                                placeholder="Premium pre-wedding photography and films"
+                                placeholder="Premium photography and films"
                             />
                         </div>
                         <div>

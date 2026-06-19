@@ -110,323 +110,394 @@ export default function StudioPageUI({ b }) {
         <>
             {/* Google Fonts */}
             <style>{`
-                @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap');
 
-                .sp-root {
-                    font-family: 'DM Sans', system-ui, sans-serif;
-                    background: var(--bg);
-                    color: var(--text);
-                    min-height: 100vh;
-                    transition: background 0.35s ease, color 0.35s ease;
-                    -webkit-font-smoothing: antialiased;
-                }
-                .sp-display {
-                    font-family: 'Cormorant Garamond', Georgia, serif;
-                }
-                /* Floating theme switcher */
-                .sp-theme-bar {
-                    position: fixed;
-                    top: 20px;
-                    right: 20px;
-                    z-index: 200;
-                    display: flex;
-                    align-items: center;
-                    gap: 8px;
-                    background: var(--surface);
-                    border: 1px solid var(--border);
-                    border-radius: 999px;
-                    padding: 8px 14px;
-                    box-shadow: var(--shadow);
-                    transition: background 0.35s, border 0.35s;
-                }
-                .sp-theme-bar span {
-                    font-size: 10px;
-                    font-weight: 500;
-                    letter-spacing: 0.1em;
-                    text-transform: uppercase;
-                    color: var(--muted);
-                    margin-right: 2px;
-                }
-                .sp-dot {
-                    width: 20px;
-                    height: 20px;
-                    border-radius: 50%;
-                    border: 2px solid transparent;
-                    cursor: pointer;
-                    transition: transform 0.2s, border-color 0.2s;
-                    outline: none;
-                    padding: 0;
-                    background: transparent;
-                }
-                .sp-dot:hover { transform: scale(1.25); }
-                .sp-dot.active { border-color: var(--text); }
+    .sp-root {
+        font-family: 'DM Sans', system-ui, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        min-height: 100vh;
+        transition: background 0.35s ease, color 0.35s ease;
+        -webkit-font-smoothing: antialiased;
+    }
+    .sp-display {
+        font-family: 'Cormorant Garamond', Georgia, serif;
+    }
+    
+    /* Floating theme switcher */
+    .sp-theme-bar {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 200;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        padding: 8px 14px;
+        box-shadow: var(--shadow);
+        transition: background 0.35s, border 0.35s, transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        cursor: pointer;
+    }
+    
+    .sp-theme-label {
+        font-size: 10px;
+        font-weight: 500;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-right: 2px;
+        white-space: nowrap;
+        transition: opacity 0.3s ease;
+    }
+    
+    .sp-dots-container {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        overflow: hidden;
+        max-width: 200px;
+        transition: max-width 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), opacity 0.3s ease;
+    }
+    
+    .sp-dot {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        border: 2px solid transparent;
+        cursor: pointer;
+        transition: transform 0.2s, border-color 0.2s;
+        outline: none;
+        padding: 0;
+        background: transparent;
+        flex-shrink: 0;
+    }
+    .sp-dot:hover { opacity: 0.8;  }
+    .sp-dot.active { border-color: var(--text); }
 
-                /* Hero - Reduced padding */
-                .sp-hero {
-                    background: var(--hero-bg);
-                    padding: clamp(40px, 6vw, 80px) 24px clamp(48px, 8vw, 100px);
-                    text-align: center;
-                    position: relative;
-                    transition: background 0.35s;
-                }
-                .sp-hero-eyebrow {
-                    font-family: 'DM Sans', sans-serif;
-                    font-size: 11px;
-                    letter-spacing: 0.2em;
-                    text-transform: uppercase;
-                    color: var(--muted);
-                    margin: 0 0 12px;
-                }
-                .sp-hero-name {
-                    font-size: clamp(36px, 8vw, 72px);
-                    font-weight: 700;
-                    line-height: 1.0;
-                    margin: 0;
-                    letter-spacing: -0.01em;
-                }
-                .sp-divider {
-                    width: 40px;
-                    height: 2px;
-                    background: var(--accent);
-                    margin: 16px auto;
-                    transition: background 0.35s;
-                }
-                .sp-hero-headline {
-                    font-size: clamp(14px, 2vw, 18px);
-                    color: var(--muted);
-                    max-width: 500px;
-                    margin: 0 auto 24px;
-                    line-height: 1.6;
-                    font-weight: 300;
-                }
+    /* Mobile theme switcher - only "Theme" text visible */
+    @media (max-width: 600px) {
+        .sp-theme-bar {
+            right: 16px;
+            top: 16px;
+            padding: 6px 12px;
+            gap: 4px;
+            transform: translateX(calc(100% - 52px));
+        }
+        
+        .sp-theme-bar:hover,
+        .sp-theme-bar:focus-within {
+            transform: translateX(0);
+        }
+        
+        .sp-theme-bar .sp-dots-container {
+            max-width: 0;
+            opacity: 0;
+        }
+        
+        .sp-theme-bar:hover .sp-dots-container,
+        .sp-theme-bar:focus-within .sp-dots-container {
+            max-width: 200px;
+            opacity: 1;
+        }
+        
+        .sp-theme-label {
+            font-size: 9px;
+            padding: 2px 4px;
+        }
+        
+        .sp-dot {
+            width: 18px;
+            height: 18px;
+        }
+    }
 
-                /* WhatsApp button */
-                .sp-wa-btn {
-                    display: inline-flex;
-                    align-items: center;
-                    gap: 8px;
-                    background: var(--accent);
-                    color: var(--accent-fg);
-                    font-family: 'DM Sans', sans-serif;
-                    font-size: 13px;
-                    font-weight: 500;
-                    letter-spacing: 0.04em;
-                    text-decoration: none;
-                    padding: 12px 24px;
-                    border-radius: 999px;
-                    transition: opacity 0.2s, transform 0.25s;
-                }
-                .sp-wa-btn:hover { opacity: 0.85; transform: translateY(-2px); }
+    @media (max-width: 400px) {
+        .sp-theme-bar {
+            transform: translateX(calc(100% - 46px));
+            padding: 5px 10px;
+        }
+        
+        .sp-theme-label {
+            font-size: 8px;
+        }
+        
+        .sp-dot {
+            width: 16px;
+            height: 16px;
+        }
+    }
 
-                /* Contact Button - Floating */
-                .sp-contact-btn {
-                    position: fixed;
-                    bottom: 24px;
-                    right: 24px;
-                    z-index: 100;
-                    display: flex;
-                    align-items: center;
-                    gap: 10px;
-                    background: var(--accent);
-                    color: var(--accent-fg);
-                    font-family: 'DM Sans', sans-serif;
-                    font-size: 14px;
-                    font-weight: 500;
-                    padding: 14px 24px;
-                    border-radius: 999px;
-                    border: none;
-                    cursor: pointer;
-                    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-                    transition: transform 0.3s ease, box-shadow 0.3s ease;
-                }
-                .sp-contact-btn:hover {
-                    transform: translateY(-3px);
-                    box-shadow: 0 8px 30px rgba(0,0,0,0.25);
-                }
-                .sp-contact-btn svg {
-                    width: 20px;
-                    height: 20px;
-                }
+    /* Hero - Reduced padding */
+    .sp-hero {
+        background: var(--hero-bg);
+        padding: clamp(40px, 6vw, 80px) 24px clamp(48px, 8vw, 100px);
+        text-align: center;
+        position: relative;
+        transition: background 0.35s;
+    }
+    .sp-hero-eyebrow {
+        font-family: 'DM Sans', sans-serif;
+        font-size: 11px;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin: 0 0 12px;
+    }
+    .sp-hero-name {
+        font-size: clamp(36px, 8vw, 72px);
+        font-weight: 700;
+        line-height: 1.0;
+        margin: 0;
+        letter-spacing: -0.01em;
+    }
+    .sp-divider {
+        width: 40px;
+        height: 2px;
+        background: var(--accent);
+        margin: 16px auto;
+        transition: background 0.35s;
+    }
+    .sp-hero-headline {
+        font-size: clamp(14px, 2vw, 18px);
+        color: var(--muted);
+        max-width: 500px;
+        margin: 0 auto 24px;
+        line-height: 1.6;
+        font-weight: 300;
+    }
 
-                /* About */
-                .sp-about {
-                    max-width: 720px;
-                    margin: 0 auto;
-                    padding: clamp(32px, 5vw, 60px) 24px;
-                }
-                .sp-about-card {
-                    background: var(--surface);
-                    border: 1px solid var(--border);
-                    border-radius: 16px;
-                    padding: clamp(24px, 4vw, 40px);
-                    box-shadow: var(--shadow);
-                    transition: background 0.35s, border 0.35s;
-                }
-                .sp-about-label {
-                    font-size: 10px;
-                    letter-spacing: 0.2em;
-                    text-transform: uppercase;
-                    color: var(--accent);
-                    margin: 0 0 8px;
-                    display: block;
-                    transition: color 0.35s;
-                }
-                .sp-about-text {
-                    font-size: clamp(15px, 1.8vw, 17px);
-                    line-height: 1.75;
-                    font-weight: 300;
-                    color: var(--text);
-                    margin: 0;
-                }
+    /* WhatsApp button */
+    .sp-wa-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--accent);
+        color: var(--accent-fg);
+        font-family: 'DM Sans', sans-serif;
+        font-size: 13px;
+        font-weight: 500;
+        letter-spacing: 0.04em;
+        text-decoration: none;
+        padding: 12px 24px;
+        border-radius: 999px;
+        transition: opacity 0.2s, transform 0.25s;
+    }
+    .sp-wa-btn:hover { opacity: 0.85; transform: translateY(-2px); }
 
-                /* Gallery */
-                .sp-gallery {
-                    max-width: 1240px;
-                    margin: 0 auto;
-                    padding: 0 24px clamp(40px, 6vw, 80px);
-                }
-                .sp-section-header {
-                    text-align: center;
-                    margin-bottom: 32px;
-                }
-                .sp-section-label {
-                    font-size: 10px;
-                    letter-spacing: 0.2em;
-                    text-transform: uppercase;
-                    color: var(--accent);
-                    display: block;
-                    margin-bottom: 6px;
-                    transition: color 0.35s;
-                }
-                .sp-section-title {
-                    font-size: clamp(28px, 4vw, 40px);
-                    font-weight: 600;
-                    margin: 0;
-                    line-height: 1.1;
-                }
-                .sp-grid {
-                    display: grid;
-                    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-                    gap: 20px;
-                }
-                .sp-card {
-                    background: var(--surface);
-                    border: 1px solid var(--border);
-                    border-radius: 14px;
-                    overflow: hidden;
-                    box-shadow: var(--shadow);
-                    text-decoration: none;
-                    color: inherit;
-                    display: block;
-                    transition:
-                        transform 0.35s cubic-bezier(0.25, 0.8, 0.25, 1),
-                        box-shadow 0.35s cubic-bezier(0.25, 0.8, 0.25, 1),
-                        background 0.35s,
-                        border 0.35s;
-                }
-                .sp-card:hover {
-                    transform: translateY(-4px);
-                    box-shadow: var(--shadow-hover);
-                }
-                .sp-card-img-wrap {
-                    overflow: hidden;
-                    height: 220px;
-                }
-                .sp-card-img {
-                    width: 100%;
-                    height: 100%;
-                    object-fit: cover;
-                    display: block;
-                    transition: transform 0.55s cubic-bezier(0.25, 0.8, 0.25, 1);
-                }
-                .sp-card:hover .sp-card-img {
-                    transform: scale(1.05);
-                }
-                .sp-card-body {
-                    padding: 14px 18px 18px;
-                }
-                .sp-card-title {
-                    font-family: 'Cormorant Garamond', serif;
-                    font-size: 18px;
-                    font-weight: 600;
-                    margin: 0 0 2px;
-                    line-height: 1.2;
-                }
-                .sp-card-type {
-                    font-size: 10px;
-                    letter-spacing: 0.15em;
-                    text-transform: uppercase;
-                    color: var(--muted);
-                    margin: 0;
-                }
+    /* Contact Button - Floating */
+    .sp-contact-btn {
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        z-index: 100;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: var(--accent);
+        color: var(--accent-fg);
+        font-family: 'DM Sans', sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        padding: 14px 24px;
+        border-radius: 999px;
+        border: none;
+        cursor: pointer;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .sp-contact-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+    }
+    .sp-contact-btn svg {
+        width: 20px;
+        height: 20px;
+    }
 
-                /* Footer CTA */
-                .sp-cta {
-                    background: var(--hero-bg);
-                    padding: clamp(40px, 6vw, 80px) 24px;
-                    text-align: center;
-                    transition: background 0.35s;
-                }
-                .sp-cta-title {
-                    font-size: clamp(24px, 4vw, 40px);
-                    font-weight: 600;
-                    margin: 0 0 8px;
-                    line-height: 1.15;
-                }
-                .sp-cta-sub {
-                    font-size: 15px;
-                    color: var(--muted);
-                    font-weight: 300;
-                    margin: 0 0 28px;
-                }
+    /* About */
+    .sp-about {
+        max-width: 720px;
+        margin: 0 auto;
+        padding: clamp(32px, 5vw, 60px) 24px;
+    }
+    .sp-about-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: clamp(24px, 4vw, 40px);
+        box-shadow: var(--shadow);
+        transition: background 0.35s, border 0.35s;
+    }
+    .sp-about-label {
+        font-size: 10px;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin: 0 0 8px;
+        display: block;
+        transition: color 0.35s;
+    }
+    .sp-about-text {
+        font-size: clamp(15px, 1.8vw, 17px);
+        line-height: 1.75;
+        font-weight: 300;
+        color: var(--text);
+        margin: 0;
+    }
 
-                /* Footer */
-                .sp-footer {
-                    border-top: 1px solid var(--border);
-                    padding: 20px 24px;
-                    text-align: center;
-                    font-size: 12px;
-                    color: var(--muted);
-                    transition: border 0.35s;
-                }
+    /* Gallery */
+    .sp-gallery {
+        max-width: 1240px;
+        margin: 0 auto;
+        padding: 0 24px clamp(40px, 6vw, 80px);
+    }
+    .sp-section-header {
+        text-align: center;
+        margin-bottom: 32px;
+    }
+    .sp-section-label {
+        font-size: 10px;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--accent);
+        display: block;
+        margin-bottom: 6px;
+        transition: color 0.35s;
+    }
+    .sp-section-title {
+        font-size: clamp(28px, 4vw, 40px);
+        font-weight: 600;
+        margin: 0;
+        line-height: 1.1;
+    }
+    .sp-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 20px;
+    }
+    .sp-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: var(--shadow);
+        text-decoration: none;
+        color: inherit;
+        display: block;
+        transition:
+            transform 0.35s cubic-bezier(0.25, 0.8, 0.25, 1),
+            box-shadow 0.35s cubic-bezier(0.25, 0.8, 0.25, 1),
+            background 0.35s,
+            border 0.35s;
+    }
+    .sp-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-hover);
+    }
+    .sp-card-img-wrap {
+        overflow: hidden;
+        height: 220px;
+    }
+    .sp-card-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        transition: transform 0.55s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+    .sp-card:hover .sp-card-img {
+        transform: scale(1.05);
+    }
+    .sp-card-body {
+        padding: 14px 18px 18px;
+    }
+    .sp-card-title {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 18px;
+        font-weight: 600;
+        margin: 0 0 2px;
+        line-height: 1.2;
+    }
+    .sp-card-type {
+        font-size: 10px;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin: 0;
+    }
 
-                /* Mobile responsive */
-                @media (max-width: 600px) {
-                    .sp-contact-btn span { display: none; }
-                    .sp-contact-btn { padding: 14px; border-radius: 50%; }
-                    .sp-grid {
-                        grid-template-columns: 1fr 1fr;
-                        gap: 12px;
-                    }
-                    .sp-card-img-wrap { height: 160px; }
-                    .sp-card-body { padding: 10px 12px 14px; }
-                    .sp-card-title { font-size: 15px; }
-                }
-                @media (max-width: 400px) {
-                    .sp-grid { grid-template-columns: 1fr; }
-                }
+    /* Footer CTA */
+    .sp-cta {
+        background: var(--hero-bg);
+        padding: clamp(40px, 6vw, 80px) 24px;
+        text-align: center;
+        transition: background 0.35s;
+    }
+    .sp-cta-title {
+        font-size: clamp(24px, 4vw, 40px);
+        font-weight: 600;
+        margin: 0 0 8px;
+        line-height: 1.15;
+    }
+    .sp-cta-sub {
+        font-size: 15px;
+        color: var(--muted);
+        font-weight: 300;
+        margin: 0 0 28px;
+    }
 
-                @media (prefers-reduced-motion: reduce) {
-                    .sp-card, .sp-card-img, .sp-wa-btn, .sp-contact-btn { transition: none !important; }
-                }
-            `}</style>
+    /* Footer */
+    .sp-footer {
+        border-top: 1px solid var(--border);
+        padding: 20px 24px;
+        text-align: center;
+        font-size: 12px;
+        color: var(--muted);
+        transition: border 0.35s;
+    }
+
+    /* Mobile responsive */
+    @media (max-width: 600px) {
+        .sp-contact-btn span { display: none; }
+        .sp-contact-btn { padding: 14px; border-radius: 50%; }
+        .sp-grid {
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        .sp-card-img-wrap { height: 160px; }
+        .sp-card-body { padding: 10px 12px 14px; }
+        .sp-card-title { font-size: 15px; }
+    }
+    @media (max-width: 400px) {
+        .sp-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .sp-card, .sp-card-img, .sp-wa-btn, .sp-contact-btn { transition: none !important; }
+    }
+`}</style>
 
             <div className="sp-root" style={cssVars}>
 
                 {/* ── Floating Theme Switcher ───────────────────────────────── */}
                 <div className="sp-theme-bar" role="group" aria-label="Choose colour theme">
-                    <span>Theme</span>
-                    {Object.entries(THEMES).map(([key, th]) => (
-                        <button
-                            key={key}
-                            className={`sp-dot${themeKey === key ? ' active' : ''}`}
-                            style={{ background: th.dot }}
-                            title={th.label}
-                            aria-label={th.label}
-                            aria-pressed={themeKey === key}
-                            onClick={() => applyTheme(key)}
-                        />
-                    ))}
+                    <span className="sp-theme-label">Theme</span>
+                    <div className="sp-dots-container">
+                        {Object.entries(THEMES).map(([key, th]) => (
+                            <button
+                                key={key}
+                                className={`sp-dot${themeKey === key ? ' active' : ''}`}
+                                style={{ background: th.dot }}
+                                title={th.label}
+                                aria-label={th.label}
+                                aria-pressed={themeKey === key}
+                                onClick={() => applyTheme(key)}
+                            />
+                        ))}
+                    </div>
                 </div>
 
                 {/* ── Floating Contact Button ───────────────────────────────── */}

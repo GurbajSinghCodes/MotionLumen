@@ -38,7 +38,7 @@ const businessSchema = new mongoose.Schema(
 
     headline: {
       type: String,
-      default: 'Premium pre-wedding photography and films',
+      default: 'Premium photography and films',
     },
 
     about: {

@@ -6,7 +6,6 @@ import { publicAPI, contactAPI, API } from '../lib/api';
 const contactEmail = process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'your-actual-email@gmail.com';
 const businessName = process.env.NEXT_PUBLIC_BUSINESS_NAME || 'MotionLumen';
 
-
 const wa = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '919876543210';
 
 export default function Home() {
@@ -22,10 +21,10 @@ export default function Home() {
         message: '',
     });
 
-
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [contactSuccess, setContactSuccess] = useState(false);
     const [contactError, setContactError] = useState('');
+
     // ─── Helper to get full image URL ──────────────────────────────
     const getImageUrl = (url) => {
         if (!url) return '';
@@ -35,6 +34,7 @@ export default function Home() {
         }
         return url;
     };
+
     useEffect(() => {
         fetchStudios();
     }, []);
@@ -103,6 +103,7 @@ export default function Home() {
             setIsSubmitting(false);
         }
     };
+
     // Handle WhatsApp click without triggering the parent Link
     const handleWhatsAppClick = (e, phone) => {
         e.preventDefault();
@@ -113,6 +114,9 @@ export default function Home() {
     return (
         <>
             <style>{`
+                * {
+                    box-sizing: border-box;
+                }
                 .landing-root {
                     background: #FAF8F3;
                     color: #1C1208;
@@ -121,15 +125,23 @@ export default function Home() {
                 }
                 .landing-btn {
                     display: inline-block;
-                    padding: 12px 28px;
+                    padding: 10px 20px;
                     border-radius: 999px;
                     font-weight: 600;
-                    font-size: 14px;
+                    font-size: 13px;
                     text-decoration: none;
                     transition: all 0.3s ease;
                     cursor: pointer;
                     border: none;
                     font-family: inherit;
+                    white-space: nowrap;
+                    text-align: center;
+                }
+                @media (max-width: 480px) {
+                    .landing-btn {
+                        font-size: 11px;
+                        padding: 8px 14px;
+                    }
                 }
                 .landing-btn-primary {
                     background: #1C1208;
@@ -161,7 +173,7 @@ export default function Home() {
                     background: #FFFFFF;
                     border: 1px solid #E5DBCE;
                     border-radius: 20px;
-                    padding: 24px;
+                    padding: 20px;
                     transition: all 0.3s ease;
                     box-shadow: 0 2px 24px rgba(184,134,78,0.08);
                 }
@@ -171,15 +183,21 @@ export default function Home() {
                 }
                 .landing-search {
                     width: 100%;
-                    padding: 14px 20px;
+                    padding: 12px 18px;
                     border-radius: 999px;
                     border: 2px solid #E5DBCE;
                     background: #FFFFFF;
-                    font-size: 16px;
+                    font-size: 15px;
                     outline: none;
                     transition: border-color 0.3s ease;
                     font-family: inherit;
                     color: #1C1208;
+                }
+                @media (max-width: 480px) {
+                    .landing-search {
+                        font-size: 14px;
+                        padding: 10px 16px;
+                    }
                 }
                 .landing-search:focus {
                     border-color: #B8864E;
@@ -205,7 +223,7 @@ export default function Home() {
                 .whatsapp-link {
                     color: #B8864E;
                     text-decoration: none;
-                    font-size: 14px;
+                    font-size: 13px;
                     display: inline-flex;
                     align-items: center;
                     gap: 4px;
@@ -225,26 +243,32 @@ export default function Home() {
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    padding: 20px;
+                    padding: 16px;
                     backdrop-filter: blur(4px);
                 }
                 .modal-content {
                     background: #FFFFFF;
                     border-radius: 20px;
-                    padding: 32px;
-                    max-width: 440px;
+                    padding: 28px 24px;
+                    max-width: 420px;
                     width: 100%;
                     max-height: 90vh;
                     overflow-y: auto;
                     position: relative;
                 }
+                @media (max-width: 480px) {
+                    .modal-content {
+                        padding: 20px 16px;
+                        margin: 10px;
+                    }
+                }
                 .modal-close {
                     position: absolute;
-                    top: 16px;
-                    right: 16px;
+                    top: 12px;
+                    right: 12px;
                     background: none;
                     border: none;
-                    font-size: 24px;
+                    font-size: 22px;
                     cursor: pointer;
                     color: #7A6A55;
                     padding: 4px 8px;
@@ -254,55 +278,161 @@ export default function Home() {
                 .modal-close:hover {
                     background: #f0ece6;
                 }
-                @media (max-width: 640px) {
-                    .landing-hero-grid {
-                        grid-template-columns: 1fr !important;
+                .nav-buttons {
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 8px;
+                    align-items: center;
+                }
+                @media (max-width: 480px) {
+                    .nav-buttons {
+                        gap: 6px;
                     }
-                    .landing-studio-grid {
-                        grid-template-columns: 1fr !important;
+                }
+                .hero-title {
+                    font-size: 3rem;
+                    line-height: 1.1;
+                }
+                @media (max-width: 768px) {
+                    .hero-title {
+                        font-size: 2.5rem;
+                    }
+                }
+                @media (max-width: 480px) {
+                    .hero-title {
+                        font-size: 2rem;
+                    }
+                }
+                .hero-subtitle {
+                    font-size: 1.1rem;
+                }
+                @media (max-width: 480px) {
+                    .hero-subtitle {
+                        font-size: 0.95rem;
+                    }
+                }
+                .section-title {
+                    font-size: 2rem;
+                }
+                @media (max-width: 480px) {
+                    .section-title {
+                        font-size: 1.5rem;
+                    }
+                }
+                .studio-name {
+                    font-size: 1.2rem;
+                }
+                @media (max-width: 480px) {
+                    .studio-name {
+                        font-size: 1rem;
+                    }
+                }
+                .hero-grid {
+                    grid-template-columns: 1fr 1fr;
+                }
+                @media (max-width: 768px) {
+                    .hero-grid {
+                        grid-template-columns: 1fr;
+                    }
+                    .hero-image-grid {
+                        order: -1;
+                    }
+                }
+                .hero-image-grid {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    gap: 12px;
+                }
+                @media (max-width: 480px) {
+                    .hero-image-grid {
+                        gap: 8px;
+                    }
+                }
+                .hero-image-grid img {
+                    border-radius: 16px;
+                    width: 100%;
+                    object-fit: cover;
+                }
+                .hero-image-tall {
+                    height: 240px;
+                }
+                @media (max-width: 480px) {
+                    .hero-image-tall {
+                        height: 160px;
+                    }
+                }
+                .hero-image-short {
+                    height: 160px;
+                }
+                @media (max-width: 480px) {
+                    .hero-image-short {
+                        height: 120px;
+                    }
+                }
+                .studio-grid {
+                    display: grid;
+                    gap: 24px;
+                    grid-template-columns: repeat(3, 1fr);
+                }
+                @media (max-width: 1024px) {
+                    .studio-grid {
+                        grid-template-columns: repeat(2, 1fr);
+                    }
+                }
+                @media (max-width: 640px) {
+                    .studio-grid {
+                        grid-template-columns: 1fr;
+                        gap: 16px;
+                    }
+                }
+                .footer-links {
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 16px;
+                }
+                @media (max-width: 480px) {
+                    .footer-links {
+                        gap: 12px;
+                    }
+                    .footer-links a, .footer-links button {
+                        font-size: 12px;
                     }
                 }
             `}</style>
 
             <div className="landing-root">
                 {/* ─── Navbar ────────────────────────────────────────────── */}
-                <nav className="max-w-7xl mx-auto p-6 flex flex-wrap justify-between items-center gap-4">
-                    <b className="text-2xl font-bold" style={{ color: '#1C1208' }}>
+                <nav className="max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-6 flex flex-wrap justify-between items-center gap-3">
+                    <b className="text-xl sm:text-2xl font-bold" style={{ color: '#1C1208' }}>
                         MotionLumen
                     </b>
-                    <div className="flex flex-wrap gap-3 items-center">
-                        <Link href="/login" className="landing-btn landing-btn-secondary text-sm">
+                    <div className="nav-buttons">
+                        <Link href="/login" className="landing-btn landing-btn-secondary">
                             Business Login
                         </Link>
                         <a
-                            className="landing-btn landing-btn-accent text-sm"
+                            className="landing-btn landing-btn-accent"
                             href={`https://wa.me/${wa}?text=I want to enroll my studio on MotionLumen`}
                             target="_blank"
                             rel="noreferrer"
                         >
                             Enroll on WhatsApp
                         </a>
-                        <button
-                            className="landing-btn landing-btn-primary text-sm"
-                            onClick={() => setShowContactForm(true)}
-                        >
-                            Contact Developer
-                        </button>
                     </div>
                 </nav>
 
                 {/* ─── Hero ──────────────────────────────────────────────── */}
-                <section className="max-w-7xl mx-auto px-6 py-16 md:py-20">
-                    <div className="grid md:grid-cols-2 gap-12 items-center landing-hero-grid">
+                <section className="max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-16 md:py-20">
+                    <div className="hero-grid grid gap-8 md:gap-12 items-center">
                         <div>
-                            <h1 className="text-5xl md:text-7xl font-black leading-tight" style={{ color: '#1C1208' }}>
+                            <h1 className="hero-title font-black leading-tight" style={{ color: '#1C1208' }}>
                                 Find the perfect wedding studio
                             </h1>
-                            <p className="mt-6 text-lg" style={{ color: '#7A6A55' }}>
+                            <p className="hero-subtitle mt-4 sm:mt-6" style={{ color: '#7A6A55' }}>
                                 Browse through India's best wedding photography and videography studios.
                                 Every studio has a public portfolio, contact info, and booking options.
                             </p>
-                            <div className="mt-8 flex flex-wrap gap-3">
+                            <div className="mt-6 sm:mt-8 flex flex-wrap gap-3">
                                 <a
                                     className="landing-btn landing-btn-accent"
                                     href={`https://wa.me/${wa}?text=I want to enroll my studio on MotionLumen`}
@@ -319,19 +449,19 @@ export default function Home() {
                                 </button>
                             </div>
                         </div>
-                        <div className="grid grid-cols-2 gap-3">
+                        <div className="hero-image-grid">
                             <img
-                                className="rounded-2xl h-60 w-full object-cover"
+                                className="hero-image-tall col-span-2"
                                 src="https://images.unsplash.com/photo-1529634597503-139d3726fed5?q=80&w=900"
                                 alt="Wedding photography"
                             />
                             <img
-                                className="rounded-2xl h-60 w-full object-cover mt-8"
+                                className="hero-image-short"
                                 src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=900"
                                 alt="Wedding couple"
                             />
                             <img
-                                className="rounded-2xl h-40 w-full object-cover col-span-2"
+                                className="hero-image-short"
                                 src="https://images.unsplash.com/photo-1606800052052-a08af7148866?q=80&w=900"
                                 alt="Wedding venue"
                             />
@@ -340,9 +470,9 @@ export default function Home() {
                 </section>
 
                 {/* ─── Search & Studio List ────────────────────────────── */}
-                <section className="max-w-7xl mx-auto px-6 pb-20">
-                    <div className="mb-8">
-                        <h2 className="text-3xl font-bold mb-4" style={{ color: '#1C1208' }}>
+                <section className="max-w-7xl mx-auto px-4 sm:px-6 pb-16 sm:pb-20">
+                    <div className="mb-6 sm:mb-8">
+                        <h2 className="section-title font-bold mb-3 sm:mb-4" style={{ color: '#1C1208' }}>
                             Browse Studios
                         </h2>
                         <input
@@ -378,12 +508,12 @@ export default function Home() {
                             </div>
                         </div>
                     ) : (
-                        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 landing-studio-grid place-items-center">
+                        <div className="studio-grid">
                             {filteredStudios.map((studio) => (
                                 <Link
                                     key={studio._id}
                                     href={`/studio/${studio.slug}`}
-                                    className="landing-card block no-underline w-full max-w-sm"
+                                    className="landing-card block no-underline"
                                 >
                                     <div className="studio-card-img-grid">
                                         {studio.gallery && studio.gallery.length > 0 ? (
@@ -431,7 +561,7 @@ export default function Home() {
                                                     alignItems: 'center',
                                                     justifyContent: 'center',
                                                     color: '#7A6A55',
-                                                    fontSize: '14px'
+                                                    fontSize: '13px'
                                                 }}
                                             >
                                                 No photos yet
@@ -440,20 +570,20 @@ export default function Home() {
                                     </div>
 
                                     <div className="mt-3">
-                                        <h3 className="text-xl font-bold" style={{ color: '#1C1208' }}>
+                                        <h3 className="studio-name font-bold" style={{ color: '#1C1208' }}>
                                             {studio.name}
                                         </h3>
                                         {studio.city && (
-                                            <p className="text-sm" style={{ color: '#7A6A55' }}>
+                                            <p className="text-xs sm:text-sm" style={{ color: '#7A6A55' }}>
                                                 📍 {studio.city}
                                             </p>
                                         )}
                                         {studio.headline && (
-                                            <p className="text-sm mt-1" style={{ color: '#7A6A55' }}>
+                                            <p className="text-xs sm:text-sm mt-1" style={{ color: '#7A6A55' }}>
                                                 {studio.headline}
                                             </p>
                                         )}
-                                        <div className="mt-3 flex items-center gap-3">
+                                        <div className="mt-3 flex items-center gap-3 flex-wrap">
                                             {studio.whatsapp && (
                                                 <span
                                                     className="whatsapp-link"
@@ -463,7 +593,7 @@ export default function Home() {
                                                 </span>
                                             )}
                                             <span className="text-xs" style={{ color: '#7A6A55' }}>
-                                                Click to view full portfolio →
+                                                Click to view →
                                             </span>
                                         </div>
                                     </div>
@@ -475,20 +605,20 @@ export default function Home() {
 
                 {/* ─── Footer ────────────────────────────────────────────── */}
                 <footer className="border-t" style={{ borderColor: '#E5DBCE' }}>
-                    <div className="max-w-7xl mx-auto px-6 py-8 flex flex-wrap justify-between items-center gap-4">
-                        <p className="text-sm" style={{ color: '#7A6A55' }}>
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8 flex flex-wrap justify-between items-center gap-3">
+                        <p className="text-xs sm:text-sm" style={{ color: '#7A6A55' }}>
                             © {new Date().getFullYear()} MotionLumen. All rights reserved.
                         </p>
-                        <div className="flex gap-4">
+                        <div className="footer-links">
                             <button
-                                className="text-sm"
+                                className="text-xs sm:text-sm"
                                 style={{ color: '#7A6A55' }}
                                 onClick={() => setShowContactForm(true)}
                             >
                                 Contact Developer
                             </button>
                             <a
-                                className="text-sm"
+                                className="text-xs sm:text-sm"
                                 style={{ color: '#7A6A55' }}
                                 href={`https://wa.me/${wa}`}
                                 target="_blank"
@@ -496,7 +626,7 @@ export default function Home() {
                             >
                                 WhatsApp
                             </a>
-                            <Link href="/login" className="text-sm" style={{ color: '#7A6A55' }}>
+                            <Link href="/login" className="text-xs sm:text-sm" style={{ color: '#7A6A55' }}>
                                 Business Login
                             </Link>
                         </div>
@@ -510,28 +640,28 @@ export default function Home() {
                             <button className="modal-close" onClick={() => setShowContactForm(false)}>✕</button>
 
                             {contactSuccess ? (
-                                <div className="text-center py-8">
-                                    <div style={{ fontSize: '48px', marginBottom: '12px' }}>✓</div>
-                                    <h3 className="text-xl font-bold" style={{ color: '#1C1208' }}>Thank you!</h3>
-                                    <p style={{ color: '#7A6A55' }}>We'll get back to you soon.</p>
+                                <div className="text-center py-6 sm:py-8">
+                                    <div style={{ fontSize: '40px', marginBottom: '12px' }}>✓</div>
+                                    <h3 className="text-lg sm:text-xl font-bold" style={{ color: '#1C1208' }}>Thank you!</h3>
+                                    <p className="text-sm sm:text-base" style={{ color: '#7A6A55' }}>We'll get back to you soon.</p>
                                 </div>
                             ) : (
                                 <>
-                                    <h2 className="text-2xl font-bold mb-2" style={{ color: '#1C1208' }}>
+                                    <h2 className="text-xl sm:text-2xl font-bold mb-2" style={{ color: '#1C1208' }}>
                                         Contact Developer
                                     </h2>
-                                    <p className="mb-6" style={{ color: '#7A6A55' }}>
+                                    <p className="text-sm sm:text-base mb-4 sm:mb-6" style={{ color: '#7A6A55' }}>
                                         Have questions about MotionLumen? Reach out to us.
                                     </p>
 
                                     <form onSubmit={handleContactSubmit}>
-                                        <div className="mb-4">
-                                            <label className="block text-sm font-medium mb-1" style={{ color: '#1C1208' }}>
+                                        <div className="mb-3 sm:mb-4">
+                                            <label className="block text-xs sm:text-sm font-medium mb-1" style={{ color: '#1C1208' }}>
                                                 Your Name *
                                             </label>
                                             <input
                                                 type="text"
-                                                className="w-full p-3 rounded-xl border-2 outline-none"
+                                                className="w-full p-2.5 sm:p-3 rounded-xl border-2 outline-none text-sm"
                                                 style={{ borderColor: '#E5DBCE', background: '#FAF8F3' }}
                                                 placeholder="John Doe"
                                                 value={contactFormData.name}
@@ -539,13 +669,13 @@ export default function Home() {
                                                 required
                                             />
                                         </div>
-                                        <div className="mb-4">
-                                            <label className="block text-sm font-medium mb-1" style={{ color: '#1C1208' }}>
+                                        <div className="mb-3 sm:mb-4">
+                                            <label className="block text-xs sm:text-sm font-medium mb-1" style={{ color: '#1C1208' }}>
                                                 WhatsApp Number *
                                             </label>
                                             <input
                                                 type="tel"
-                                                className="w-full p-3 rounded-xl border-2 outline-none"
+                                                className="w-full p-2.5 sm:p-3 rounded-xl border-2 outline-none text-sm"
                                                 style={{ borderColor: '#E5DBCE', background: '#FAF8F3' }}
                                                 placeholder="+91 98765 43210"
                                                 value={contactFormData.whatsapp || ''}
@@ -553,25 +683,25 @@ export default function Home() {
                                                 required
                                             />
                                         </div>
-                                        <div className="mb-4">
-                                            <label className="block text-sm font-medium mb-1" style={{ color: '#1C1208' }}>
+                                        <div className="mb-3 sm:mb-4">
+                                            <label className="block text-xs sm:text-sm font-medium mb-1" style={{ color: '#1C1208' }}>
                                                 Email (Optional)
                                             </label>
                                             <input
                                                 type="email"
-                                                className="w-full p-3 rounded-xl border-2 outline-none"
+                                                className="w-full p-2.5 sm:p-3 rounded-xl border-2 outline-none text-sm"
                                                 style={{ borderColor: '#E5DBCE', background: '#FAF8F3' }}
                                                 placeholder="john@example.com"
                                                 value={contactFormData.email || ''}
                                                 onChange={(e) => setContactFormData({ ...contactFormData, email: e.target.value })}
                                             />
                                         </div>
-                                        <div className="mb-4">
-                                            <label className="block text-sm font-medium mb-1" style={{ color: '#1C1208' }}>
+                                        <div className="mb-3 sm:mb-4">
+                                            <label className="block text-xs sm:text-sm font-medium mb-1" style={{ color: '#1C1208' }}>
                                                 Your Message *
                                             </label>
                                             <textarea
-                                                className="w-full p-3 rounded-xl border-2 outline-none min-h-[100px]"
+                                                className="w-full p-2.5 sm:p-3 rounded-xl border-2 outline-none min-h-[80px] sm:min-h-[100px] text-sm"
                                                 style={{ borderColor: '#E5DBCE', background: '#FAF8F3' }}
                                                 placeholder="Tell us how we can help..."
                                                 value={contactFormData.message}
@@ -580,7 +710,7 @@ export default function Home() {
                                             />
                                         </div>
                                         {contactError && (
-                                            <p className="text-sm mb-3" style={{ color: '#dc3545' }}>
+                                            <p className="text-xs sm:text-sm mb-3" style={{ color: '#dc3545' }}>
                                                 {contactError}
                                             </p>
                                         )}

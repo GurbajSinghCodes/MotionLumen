@@ -399,7 +399,7 @@ module.exports = async function buildInvoicePdf(client, businessProfile) {
                 <div class="value">${data.client.clientName}</div>
             </div>
             <div class="group" style="text-align:center;">
-                <div class="label">Pre-Wedding Date</div>
+                <div class="label">Shoot Date</div>
                 <div class="value">${data.client.preWeddingDate}</div>
             </div>
             <div class="group" style="text-align:right;">

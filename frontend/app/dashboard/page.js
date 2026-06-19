@@ -270,7 +270,7 @@ export default function Dashboard() {
                 throw new Error('Invoice ID is required');
             }
             if (!form.preWeddingDate) {
-                throw new Error('Pre-wedding date is required');
+                throw new Error('Shoot date is required');
             }
 
             const submitData = {
@@ -591,7 +591,7 @@ export default function Dashboard() {
 
                         <div>
                             <label className="block mb-2 text-sm font-semibold text-zinc-300 flex items-center gap-2">
-                                <Calendar size={14} /> Date of Pre-Wedding *
+                                <Calendar size={14} /> Date of Shoot *
                             </label>
                             <input
                                 className="input"

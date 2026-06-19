@@ -49,7 +49,7 @@ const businessProfileSchema = new mongoose.Schema({
     // ─── Description ──────────────────────────────────
     headline: {
         type: String,
-        default: 'Premium pre-wedding photography and films',
+        default: 'Premium photography and films',
     },
     about: {
         type: String,
@@ -72,7 +72,6 @@ const businessProfileSchema = new mongoose.Schema({
     timestamps: true,
 });
 
-businessProfileSchema.index({ businessId: 1 }, { unique: true });
 
 // Virtual for full address
 businessProfileSchema.virtual('fullAddress').get(function () {
